@@ -1,7 +1,10 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <term.h>
+#include <unistd.h>
+#include "./assert_functions.c"
 
-typedef int (*test_function)();
+typedef void (*test_function)();
 
 struct test_suite_struct {
   int number_tests;
@@ -10,12 +13,20 @@ struct test_suite_struct {
 
 typedef struct test_suite_struct test_suite;
 
+
+int resultTest;
+
+
 test_suite initTestSuite (test_function[]);
 
 int executeTests (test_suite);
 
-int assertIntEqual (int, int);
+void newTest (char* testName);
 
-int assertIntMatrixAllEqualZero (int num_rows, int num_columns, int** received);
+void endTest ();
 
-int assertIntMatrix (int num_rows, int num_columns, int** received, int expected[4][4]);
+// int assertIntEqual (int, int);
+
+// int assertIntMatrixAllEqualZero (int num_rows, int num_columns, int** received);
+
+// int assertIntMatrix (int num_rows, int num_columns, int** received, int expected[4][4]);

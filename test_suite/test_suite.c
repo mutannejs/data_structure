@@ -1,5 +1,7 @@
 #include "./test_suite.h"
 
+extern int resultTest;
+
 test_suite initTestSuite (test_function tests[]) {
   test_suite suite;
 
@@ -15,41 +17,31 @@ test_suite initTestSuite (test_function tests[]) {
 int executeTests (test_suite suite) {
   int result = 1;
 
+  setupterm(NULL, STDOUT_FILENO, NULL);
+  putp(exit_attribute_mode);
+
   for (int i = 0; i < suite.number_tests; i++) {
-    if (!suite.tests[i]()) result = 0;
+    suite.tests[i]();
+    result *= resultTest;
   }
 
-  if (result) printf("Não ocorreu nenhum erro.\n");
+  if (result) printf("\nTodos os testes obtiveram sucesso.\n");
 
   return result;
 }
 
-int assertIntEqual (int i1, int i2) {
-  return i1 == i2;
+void newTest (char* testName) {
+  resultTest = 1;
+
+  printf("%s:", testName);
 }
 
-int assertIntMatrixAllEqualZero(int n, int m, int** received) {
-  for (int i = 0; i < n; i++) {
-    for (int j = 0; j < m; j++) {
-      if (received[i][j] != 0) {
-        printf("Erro na linha %d e coluna %d\n", i, j);
-        printf("%d é diferente de 0\n\n", received[i][j]);
-        return 0;
-      }
-    }
+void endTest () {
+  if (resultTest) {
+    putp(tparm(set_a_foreground, 2));
+    putp(enter_bold_mode);
+    printf(" success\n");
+    putp(exit_attribute_mode);
+    fflush(stdout);
   }
-  return 1;
-}
-
-int assertIntMatrix (int n, int m, int** received, int expected[4][4]) {
-  for (int i = 0; i < n; i++) {
-    for (int j = 0; j < m; j++) {
-      if (received[i][j] != expected[i][j]) {
-        printf("Erro na linha %d e coluna %d\n", i, j);
-        printf("%d (recebido) é diferente de %d (esperado)\n\n", received[i][j], expected[i][j]);
-        return 0;
-      }
-    }
-  }
-  return 1;
 }

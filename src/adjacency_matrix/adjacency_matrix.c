@@ -22,12 +22,22 @@ adjacency_matrix nullGraph (int n) {
 
 void addEdge (adjacency_matrix am, int vertex1, int vertex2) {
   am.matrix[vertex1][vertex2]++;
-  if (vertex1 != vertex2) am.matrix[vertex2][vertex1]++;
+  am.matrix[vertex2][vertex1]++;
 }
 
 void removeEdge (adjacency_matrix am, int vertex1, int vertex2) {
   am.matrix[vertex1][vertex2]--;
-  if (vertex1 != vertex2) am.matrix[vertex2][vertex1]--;
+  am.matrix[vertex2][vertex1]--;
 }
 
-int countEdges (adjacency_matrix am) {}
+int getSize (adjacency_matrix am) {
+  int size = 0;
+
+  for (int i = 0; i < am.n; i++) {
+    for (int j = 0; j < am.n; j++) {
+      size += am.matrix[i][j];
+    }
+  }
+
+  return size / 2;
+}
