@@ -1,69 +1,80 @@
 #include "./src/adjacency_matrix/adjacency_matrix.c"
 #include "./test_suite/test_suite.c"
 
+adjacency_matrix initGraph(int);
 void testInitGraph();
 void testAddEdges();
-void testgetSize();
+void testGetSize();
 
 int main() {
   test_function t_functions[] = {
     testInitGraph,
     testAddEdges,
-    testgetSize,
+    testGetSize,
     NULL,
   };
 
-  test_suite s_test = initTestSuite(t_functions);
+  test_suite s_test = initTestSuite(t_functions, "AdjacencyMatrix");
   executeTests(s_test);
 
   return 0;
 }
 
-void testInitGraph() {
-  int expectedNumVertex = 4;
-  int receivedNumVertex = -1;
+adjacency_matrix initGraph(int step) {
+  adjacency_matrix am = nullGraph(4);
 
-  adjacency_matrix am = nullGraph(expectedNumVertex);
-  receivedNumVertex = am.n;
+  if (step == 0) return am;
+
+  addEdge(am, 0, 1);
+  addEdge(am, 0, 2);
+  addEdge(am, 0, 2);
+  addEdge(am, 0, 3);
+  addEdge(am, 2, 2);
+
+  return am;
+}
+
+void testInitGraph() {
+  int** receivedMatrix;
+  int expectedNumVertices, receivedNumVertices;
+  adjacency_matrix am = initGraph(0);
+
+  expectedNumVertices = 4;
+  receivedNumVertices = *am.n;
+  receivedMatrix = am.matrix;
 
   newTest("testInitGraph");
-  assertIntEqual(receivedNumVertex, expectedNumVertex);
-  assertIntMatrixAllEqualZero(expectedNumVertex, expectedNumVertex, am.matrix);
+  assertIntEqual(receivedNumVertices, expectedNumVertices);
+  assertIntMatrixAllEqualZero(expectedNumVertices, expectedNumVertices, receivedMatrix);
   endTest();
 }
 
 void testAddEdges() {
+  int** expectedMatrix, ** receivedMatrix;
   int numVertices = 4;
-  int expectedMatrix[4][4] = {
-    {0, 1, 2, 1},
-    {1, 0, 0, 0},
-    {2, 0, 2, 0},
-    {1, 0, 0, 0}
-  };
+  adjacency_matrix am = initGraph(1);
 
-  adjacency_matrix am = nullGraph(numVertices);
-  addEdge(am, 0, 1);
-  addEdge(am, 0, 2);
-  addEdge(am, 0, 2);
-  addEdge(am, 0, 3);
-  addEdge(am, 2, 2);
+  expectedMatrix = mockMatrix(
+    numVertices,
+    numVertices,
+    numVertices * numVertices,
+    0, 1, 2, 1,
+    1, 0, 0, 0,
+    2, 0, 2, 0,
+    1, 0, 0, 0
+  );
+  receivedMatrix = am.matrix;
 
   newTest("testAddEdges");
-  assertIntMatrix(numVertices, numVertices, am.matrix, expectedMatrix);
+  assertIntMatrix(numVertices, numVertices, receivedMatrix, expectedMatrix);
   endTest();
 }
 
-void testgetSize() {
-  int numVertices = 4;
-  int expectedSize = 5;
-  int receivedSize = -1;
+void testGetSize() {
+  int expectedSize, receivedSize;
+  adjacency_matrix am = initGraph(1);
 
-  adjacency_matrix am = nullGraph(numVertices);
-  addEdge(am, 0, 1);
-  addEdge(am, 0, 2);
-  addEdge(am, 0, 2);
-  addEdge(am, 0, 3);
-  addEdge(am, 2, 2);
+  expectedSize = 5;
   receivedSize = getSize(am);
 
   newTest("testgetSize");

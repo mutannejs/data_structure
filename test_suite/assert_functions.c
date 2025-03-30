@@ -3,6 +3,8 @@
 extern int resultTest;
 
 void assertIntEqual (int i1, int i2) {
+  if (!resultTest) return;
+
   if (i1 != i2) {
     putp(tparm(set_a_foreground, 9));
     putp(enter_bold_mode);
@@ -39,7 +41,7 @@ void assertIntMatrixAllEqualZero(int n, int m, int** received) {
   }
 }
 
-void assertIntMatrix (int n, int m, int** received, int expected[4][4]) {
+void assertIntMatrix (int n, int m, int** received, int** expected) {
   if (!resultTest) return;
 
   for (int i = 0; i < n; i++) {

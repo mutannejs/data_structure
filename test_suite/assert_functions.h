@@ -6,4 +6,4 @@ void assertIntEqual (int i1, int i2);
 
 void assertIntMatrixAllEqualZero(int n, int m, int** received);
 
-void assertIntMatrix (int n, int m, int** received, int expected[4][4]);
+void assertIntMatrix (int n, int m, int** received, int** expected);

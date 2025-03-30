@@ -15,7 +15,7 @@
 #include <stdlib.h>
 
 struct adjacency_matrix_struct {
-  int n;
+  int* n;
   int** matrix;
 };
 
