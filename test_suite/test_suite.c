@@ -1,6 +1,7 @@
 #include "./test_suite.h"
 
 extern int resultTest;
+extern int testCount;
 
 test_suite initTestSuite (test_function tests[], char* name) {
   test_suite suite;
@@ -12,44 +13,47 @@ test_suite initTestSuite (test_function tests[], char* name) {
   suite.tests = tests;
   suite.name = name;
 
+  testCount = 0;
+
   return suite;
 }
 
 int executeTests (test_suite suite) {
-  int result = 1;
+  int result;
+  char* suiteName;
 
-  setupterm(NULL, STDOUT_FILENO, NULL);
-  putp(exit_attribute_mode);
+  result = 1;
+  suiteName = (char*) calloc(strlen(suite.name) + 3, sizeof(char));
+  sprintf(suiteName, " %s ", suite.name);
+
+  initSetupTerm();
 
   printf(">>>>> Suite de Teste:");
-  putp(enter_bold_mode);
-  printf(" %s ", suite.name);
-  putp(exit_attribute_mode);
-  fflush(stdout);
-  printf(" <<<<<\n");
+  printInBold(suiteName, -1, -1);
+  printf("<<<<<\n");
 
   for (int i = 0; i < suite.number_tests; i++) {
     suite.tests[i]();
     result *= resultTest;
   }
 
-  if (result) printf("Todos os testes obtiveram sucesso.\n\n");
+  if (result)
+    printf("Todos os testes obtiveram sucesso.\n\n");
+  else
+    printf("\n\n");
 
   return result;
 }
 
 void newTest (char* testName) {
   resultTest = 1;
+  testCount += 1;
 
-  printf("%s:", testName);
+  printf("(%d) %s:", testCount, testName);
 }
 
 void endTest () {
   if (resultTest) {
-    putp(tparm(set_a_foreground, 2));
-    putp(enter_bold_mode);
-    printf(" success\n");
-    putp(exit_attribute_mode);
-    fflush(stdout);
+    printSuccess();
   }
 }

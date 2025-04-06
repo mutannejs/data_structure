@@ -10,7 +10,4 @@
 
 ## TODO
 
-- [ ] refatorar assert functions (muita repetição)
-- [ ] criar testes de remoção de arestas
-- [ ] tratar entradas inválidas em métodos de adicionar e remover arestas
-- [ ] criar getters e setters
+- [ ] funções que aproveitem a estrutura das matrizes

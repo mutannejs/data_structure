@@ -1,7 +1,11 @@
 #!/bin/bash
 
-gcc -o am.run adjacency_matrix.test.c -std=c99 -Wall -ltinfo
-./am.run
+if [ ! -d build/ ]; then
+  mkdir build
+fi
 
-gcc -o im.run incidence_matrix.test.c -std=c99 -Wall -ltinfo
-./im.run
+gcc -o build/am.run tests/adjacency_matrix.test.c -std=c99 -Wall -ltinfo
+./build/am.run
+
+gcc -o build/im.run tests/incidence_matrix.test.c -std=c99 -Wall -ltinfo
+./build/im.run

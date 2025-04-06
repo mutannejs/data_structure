@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <term.h>
-#include <unistd.h>
+#include <string.h>
 #include "./assert_functions.c"
 #include "./mock.c"
 
@@ -17,6 +16,7 @@ typedef struct test_suite_struct test_suite;
 
 
 int resultTest;
+int testCount;
 
 
 test_suite initTestSuite (test_function[], char* name);

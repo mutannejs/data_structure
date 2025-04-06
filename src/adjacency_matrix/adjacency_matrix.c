@@ -1,14 +1,21 @@
+#include <stdlib.h>
 #include <stdio.h>
+#include <iso646.h>
 #include "./adjacency_matrix.h"
 
 adjacency_matrix nullGraph (int n) {
+  if (n < 0)
+    return nullGraph(0);
+
   adjacency_matrix am;
+  int* vertices;
 
   am.n = (int*) calloc(1, sizeof(int));
-  *(am.n) = n;
   am.matrix = (int**) malloc(n * sizeof(int*));
 
-  int* vertices = (int*) calloc(n * n, sizeof(int));
+  vertices = (int*) calloc(n * n, sizeof(int));
+
+  *(am.n) = n;
 
   for (int i = 0; i < n; i++) {
     am.matrix[i] = &vertices[i*n];
@@ -18,13 +25,16 @@ adjacency_matrix nullGraph (int n) {
 }
 
 void addEdge (adjacency_matrix am, int vertex1, int vertex2) {
+  int isValidInsertion =
+    vertex1 >= 0
+    and vertex1 < *(am.n)
+    and vertex2 >=0
+    and vertex2 < *(am.n);
+  if (not isValidInsertion)
+    return;
+
   am.matrix[vertex1][vertex2] += 1;
   am.matrix[vertex2][vertex1] += 1;
-}
-
-void removeEdge (adjacency_matrix am, int vertex1, int vertex2) {
-  am.matrix[vertex1][vertex2] -= 1;
-  am.matrix[vertex2][vertex1] -= 1;
 }
 
 int getSize (adjacency_matrix am) {

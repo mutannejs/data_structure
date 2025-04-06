@@ -2,15 +2,19 @@
 
 extern int resultTest;
 
+void printFailed () {
+  printColored(" failed\n", COLOR_ERROR, -1);
+}
+
+void printSuccess () {
+  printColored(" success\n", COLOR_SUCCESS, -1);
+}
+
 void assertIntEqual (int i1, int i2) {
   if (!resultTest) return;
 
   if (i1 != i2) {
-    putp(tparm(set_a_foreground, 9));
-    putp(enter_bold_mode);
-    printf(" failed\n");
-    putp(exit_attribute_mode);
-    fflush(stdout);
+    printFailed();
     printf(
       "\tassertIntEqual: Erro - %d (recebido) é diferente de %d\n",
       i1, i2
@@ -25,11 +29,7 @@ void assertIntMatrixAllEqualZero(int n, int m, int** received) {
   for (int i = 0; i < n; i++) {
     for (int j = 0; j < m; j++) {
       if (received[i][j] != 0) {
-        putp(tparm(set_a_foreground, 9));
-        putp(enter_bold_mode);
-        printf(" failed\n");
-        putp(exit_attribute_mode);
-        fflush(stdout);
+        printFailed();
         printf(
           "\tassertIntMatrixAllEqualZero: Erro na linha %d e coluna %d, %d (recebido) é diferente de 0\n",
           i, j, received[i][j]
@@ -47,11 +47,7 @@ void assertIntMatrix (int n, int m, int** received, int** expected) {
   for (int i = 0; i < n; i++) {
     for (int j = 0; j < m; j++) {
       if (received[i][j] != expected[i][j]) {
-        putp(tparm(set_a_foreground, 9));
-        putp(enter_bold_mode);
-        printf(" failed\n");
-        putp(exit_attribute_mode);
-        fflush(stdout);
+        printFailed();
         printf(
           "\tassertIntMatrix: Erro na linha %d e coluna %d, %d (recebido) é diferente de %d (esperado)\n",
           i, j, received[i][j], expected[i][j]
